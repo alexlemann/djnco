@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block javascript %}
+    <script src='/static/encoder/flowplayer/flowplayer-3.2.6.min.js'></script>
+    <script src='/static/encoder/flowplayer/jquery.tools.min.js'></script>
+    <script src='/static/encoder/flowplayer/flowplayer.ipad-3.2.2.js'></script>
+    <script src='/static/encoder/flowplayer/flowplayer.controls-3.0.2.min.js'></script>
+    <script src='/static/encoder/djnco.js'></script>
+{% endblock %}
+
+{% block content %}
+<div id="audio_{{ audio.identifier }}-128" style="height: 25px;">
+  <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ audio.identifier }}-128.mp3'
+     style='display:block;width:720px;height:25px;'
+     id='player_{{ audio.identifier }}-128' />
+  </a>
+</div>
+<script language="javascript">playAudio('{{ audio.identifier }}-128');</script>
+<br />
+{% endblock %}

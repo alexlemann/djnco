@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block javascript %}
+    <script src='/static/encoder/flowplayer/flowplayer-3.2.6.min.js'></script>
+    <script src='/static/encoder/flowplayer/jquery.tools.min.js'></script>
+    <script src='/static/encoder/flowplayer/flowplayer.ipad-3.2.2.js'></script>
+    <script src='/static/encoder/flowplayer/flowplayer.controls-3.0.2.min.js'></script>
+    <script src='/static/encoder/djnco.js'></script>
+{% endblock %}
+
+{% block content %}
+<div id="ios_{{ video.identifier }}" style="display: none;">
+  <video id='movie' width='480' height='320' preload controls>
+    <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.m4v' />
+  </video>
+</div>
+<div id="nonios_{{ video.identifier }}" style="display: none;">
+  <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.mp4'
+     style='display:block;width:720px;height:480px;'
+     id='player_{{ video.identifier }}' />
+  </a>
+</div>
+<script language="javascript">detectDevice('{{ video.identifier }}');</script>
+<br />
+{% endblock %}
