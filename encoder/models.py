@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.utils.safestring import mark_safe
 from django_extensions.db.fields import UUIDField
 
 from encoder.encode_tasks import encode_video, encode_audio
@@ -22,12 +21,12 @@ class Collection(models.Model):
     def import_media(self):
         files = os.listdir(settings.UPLOAD_DIR + self.slug + '/')
         for f in files:
-            for k, v in settings.INCOMING_FORMATS.items():
-                if any([ext in f for ext in v]):
+            for media_type, extensions in settings.INCOMING_FORMATS.items():
+                if any([f.endswith(ext) for ext in extensions]):
                     orig_path = os.path.join(settings.UPLOAD_DIR, self.slug, f)
-                    if k == 'video':
+                    if media_type == 'video':
                         media = Video(collection=self, upload=orig_path)
-                    elif k == 'audio':
+                    elif media_type == 'audio':
                         media = Audio(collection=self, upload=orig_path)
                     media.save()
                     shutil.move(orig_path, media.encode_src())
@@ -42,8 +41,8 @@ class Collection(models.Model):
             return 'Directory: ' + self.slug + ' not found'
         for f in files:
             found = False
-            for k, v in settings.INCOMING_FORMATS.items():
-                if any([ext in f for ext in v]):
+            for media_type, extensions in settings.INCOMING_FORMATS.items():
+                if any([f.endswith(ext) for ext in extensions]):
                     found = True
             if not found:
                 files.remove(f)
@@ -150,7 +149,7 @@ class Video(Media):
 
     def view_on_site(self):
         if self.encoding_finished:
-            return mark_safe('<a href="' + reverse('demo_video', kwargs={'identifier':self.identifier}) + '">Preview</a>')
+            return '<a href="' + reverse('demo_video', kwargs={'identifier':self.identifier}) + '">Preview</a>'
         else:
             return 'Preview'
     view_on_site.allow_tags = True
