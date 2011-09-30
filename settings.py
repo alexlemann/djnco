@@ -150,20 +150,8 @@ LOGGING = {
     }
 }
 
-UPLOAD_DIR='/home/ablemann/projects/djnco/djnco/incoming/'
-ENCODESRC_DIR='/home/ablemann/projects/djnco/djnco/encode_source/'
-ENCODEDST_DIR='/mnt/encode_dst/'
-PUBLISH_DIR='/mnt/published/'
 INCOMING_FORMATS = {
  'video' : ('mp4','mov','avi','m4v','wmv','mpg','ogv', 'mkv', 'ts'),
  'audio' : ('wave', 'wav', 'mp3', 'wma', 'aac', 'flac', 'm1a')
 }
 VIDEO_BITRATES=['600','1024']
-
-import djcelery
-djcelery.setup_loader()
-BROKER_HOST = 'localhost'
-BROKER_PORT = 5672
-BROKER_VHOST = 'libencode'
-BROKER_USER = 'libencode'
-BROKER_PASSWORD = 'abc123'
