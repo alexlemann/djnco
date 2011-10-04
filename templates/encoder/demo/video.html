@@ -23,4 +23,7 @@
 </div>
 <script language="javascript">detectDevice('{{ video.identifier }}');</script>
 <br />
+{% if video.description %}
+  {{ video.description|safe }}
+{% endif %}
 {% endblock %}

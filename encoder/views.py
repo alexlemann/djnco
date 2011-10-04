@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 
@@ -5,6 +7,10 @@ from encoder import models as encoder
 
 def demo_video(request, identifier):
     v = encoder.Video.objects.get(identifier=identifier)
+    if v.description:
+        for mins, secs in re.findall("\s(\d\d?):(\d\d)\s", v.description):
+            time = int(mins)*60 + int(secs)
+            v.description = v.description.replace(":".join((mins,secs)), '<a href="#" onClick="$f(\'player_%s\').seek(%s);">%s:%s</a>' % (v.identifier, str(time), mins, secs) )
     return render_to_response('encoder/demo/video.html', {'video' : v})
 
 def demo_audio(request, identifier):
