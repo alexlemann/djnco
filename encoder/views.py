@@ -5,16 +5,21 @@ from django.contrib.auth.decorators import login_required
 
 from encoder import models as encoder 
 
+def add_seek_links(media):
+  for mins, secs in re.findall("(\d\d?):(\d\d)", media.description):
+    time = int(mins)*60 + int(secs)
+    media.description = media.description.replace(":".join((mins,secs)), '<a href="#" onClick="$f(\'player_%s\').seek(%s);">%s:%s</a>' % (media.identifier, str(time), mins, secs) )
+
 def demo_video(request, identifier):
     v = encoder.Video.objects.get(identifier=identifier)
     if v.description:
-        for mins, secs in re.findall("(\d\d?):(\d\d)", v.description):
-            time = int(mins)*60 + int(secs)
-            v.description = v.description.replace(":".join((mins,secs)), '<a href="#" onClick="$f(\'player_%s\').seek(%s);">%s:%s</a>' % (v.identifier, str(time), mins, secs) )
+        add_seek_links(v)
     return render_to_response('encoder/demo/video.html', {'video' : v})
 
 def demo_audio(request, identifier):
     a = encoder.Audio.objects.get(identifier=identifier)
+    if a.description:
+        add_seek_links(a)
     return render_to_response('encoder/demo/audio.html', {'audio' : a})
 
 def list_media(request):
