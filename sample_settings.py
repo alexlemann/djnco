@@ -1,11 +1,17 @@
 from djnco.settings import *
 
-DEBUG = False
+DEBUG = True
+
+STATICFILES_DIRS = (
+    '/Users/alexlemann/projects/djnco/static/',
+    ('encoder', '/Users/alexlemann/projects/djnco/encoder/static'),
+)
+TEMPLATE_DIRS = ('/Users/alexlemann/projects/djnco/templates', )
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'djnco_production',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'test.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
