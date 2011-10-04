@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% for m in media %}
+    <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a><br />
+  {% endfor %}
+{% endblock %}
