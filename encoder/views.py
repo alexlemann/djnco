@@ -8,7 +8,7 @@ from encoder import models as encoder
 def demo_video(request, identifier):
     v = encoder.Video.objects.get(identifier=identifier)
     if v.description:
-        for mins, secs in re.findall("\s(\d\d?):(\d\d)\s", v.description):
+        for mins, secs in re.findall("(\d\d?):(\d\d)", v.description):
             time = int(mins)*60 + int(secs)
             v.description = v.description.replace(":".join((mins,secs)), '<a href="#" onClick="$f(\'player_%s\').seek(%s);">%s:%s</a>' % (v.identifier, str(time), mins, secs) )
     return render_to_response('encoder/demo/video.html', {'video' : v})
