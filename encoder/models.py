@@ -134,6 +134,9 @@ class Audio(Media):
             return 'Preview'
     view_on_site.allow_tags = True
 
+    def get_absolute_url(self):
+        return reverse('demo_audio', args=[self.identifier])
+
 class Video(Media):
     def encode(self):
         self.queued_time = datetime.datetime.now()
@@ -153,3 +156,6 @@ class Video(Media):
         else:
             return 'Preview'
     view_on_site.allow_tags = True
+
+    def get_absolute_url(self):
+        return reverse('demo_video', args=[self.identifier])

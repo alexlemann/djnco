@@ -17,6 +17,10 @@ def demo_audio(request, identifier):
     a = encoder.Audio.objects.get(identifier=identifier)
     return render_to_response('encoder/demo/audio.html', {'audio' : a})
 
+def list_media(request):
+    media = list(encoder.Video.objects.all()) + list(encoder.Audio.objects.all())
+    return render_to_response('encoder/list_media.html', {'media' : media})
+
 @login_required
 def encode_collection(request, collection_slug):
     encoder.Collection.objects.get(slug=collection_slug).encode()
