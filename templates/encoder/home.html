@@ -2,14 +2,18 @@
 {% load static %}
 
 {% block content %}
-  <div style="float: left;">
-      <h3>Videos:</h3>
+  <div style="float: left; padding: 10px 0px 0px 30px">
+      <h3 style='margin-left: -20px;'>Videos:</h3>
       {% for m in media %}
-        <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a> ({{ m.media_ptr.commments.count }})<br />
+      <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a>
+      {% if m.media_ptr.commments.count %}
+      ( {{ m.media_ptr.commments.count }} )
+      {% endif %}
+      <br />
       {% endfor %}
   </div>
-  <div style="float: right;">
-      <h3>Latest Comments:</h3>
+  <div style="float: right; padding: 10px 30px 0px 0px;">
+      <h3 style='margin-left: -20px;'>Latest Comments:</h3>
       {% for c in comments %}
       {% if c.commenter.get_full_name %}
       {{ c.commenter.get_full_name }}

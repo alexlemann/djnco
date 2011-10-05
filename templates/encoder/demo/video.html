@@ -19,7 +19,7 @@
 <div style="width: 970px">
 <div style="width: 240px; float: right; padding: 5px;">
   {% for c in comments %}
-    <div style="border: 1px solid black; margin: 8px;">
+    <div style="border: 1px solid darkgray; margin: 8px;">
       <div style="background-color: #DDE8DD; font-size: 70%;" >
       <img src="/static/encoder/img/Silk_user_blue_online.png" style="height: 25px;" />
       {% if c.commenter.get_full_name %}
@@ -30,7 +30,7 @@
       |
       {{ c.created_time|naturalday }}
       </div>
-      <div style="border-top: 1px solid black; padding: 5px; background-color: #FAFFFA;">
+      <div style="border-top: 1px solid darkgray; padding: 5px; background-color: #FAFFFA;">
         <p>{{ c.text|link_seek }}</p>
       </div>
     </div>
@@ -57,7 +57,7 @@
 <script language="javascript">detectDevice('{{ video.identifier }}');</script>
 <br />
 {% if description %}
-<div style="border: 1px solid black; min-height: 5ex; background-color: #FAFFFA;">
+<div style="border: 1px solid darkgray; min-height: 5ex; background-color: #FAFFFA;">
   <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px;" >
       {{ video.original_filename }} |
       {{ video.identifier }} |
