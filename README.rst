@@ -10,16 +10,16 @@ Djnco is a media encoding and publishing server built using Django.
 Getting Started
 ===============
 
- $ git clone git://github.com/lemanal/djnco.git
- $ cd djnco
- $ pip install -r requirements.txt
+   $ git clone git://github.com/lemanal/djnco.git
+   $ cd djnco
+   $ pip install -r requirements.txt
 
 Edit the local settings (see below)
 
- # Start up djnco & celery in separate shells
- $ python ./manage.py runserver
- $ python ./manage.py celeryd -E
- $ python ./manage.py celerycam
+   # Start up djnco & celery in separate shells
+   $ python ./manage.py runserver
+   $ python ./manage.py celeryd -E
+   $ python ./manage.py celerycam
  
 Djnco Settings
 ==============
