@@ -11,11 +11,13 @@ Getting Started
 ===============
 
 Download and install djnco and requirements::
+
    $ git clone git://github.com/lemanal/djnco.git
    $ cd djnco
    $ pip install -r requirements.txt
 
 Edit the local settings (see below)::
+
    # Start up djnco & celery in separate shells
    $ python ./manage.py runserver
    $ python ./manage.py celeryd -E
