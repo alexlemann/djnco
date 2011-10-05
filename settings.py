@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'django_extensions',
     'encoder',
     'djcelery',
@@ -152,3 +153,5 @@ INCOMING_FORMATS = {
  'audio' : ('wave', 'wav', 'mp3', 'wma', 'aac', 'flac', 'm1a')
 }
 VIDEO_BITRATES=['600','1024']
+
+LOGIN_REDIRECT_URL = '/encoder/'

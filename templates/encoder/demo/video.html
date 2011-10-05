@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load url from future %}
+{% load encoder %}
+{% load humanize %}
 
 {% block javascript %}
     <script src='/static/encoder/flowplayer/flowplayer-3.2.6.min.js'></script>
@@ -7,9 +10,39 @@
     <script src='/static/encoder/flowplayer/flowplayer.ipad-3.2.2.js'></script>
     <script src='/static/encoder/flowplayer/flowplayer.controls-3.0.2.min.js'></script>
     <script src='/static/encoder/djnco.js'></script>
+    <style type="text/css">
+        .errorlist {color: red;}
+    </style>
 {% endblock %}
 
 {% block content %}
+<div style="width: 970px">
+<div style="width: 240px; float: right; padding: 5px;">
+  {% for c in comments %}
+    <div style="border: 1px solid black; margin: 8px;">
+      <div style="background-color: #DDE8DD; font-size: 70%;" >
+      <img src="/static/encoder/img/Silk_user_blue_online.png" style="height: 25px;" />
+      {% if c.commenter.get_full_name %}
+        {{ c.commenter.get_full_name }}
+      {% else %}
+        {{ c.commenter.username }}
+      {% endif %}
+      |
+      {{ c.created_time|naturalday }}
+      </div>
+      <div style="border-top: 1px solid black; padding: 5px; background-color: #FAFFFA;">
+        <p>{{ c.text|link_seek }}</p>
+      </div>
+    </div>
+  {% endfor %}
+  <br />
+  <form action="{% url 'demo_video' video.identifier %}" method="post">{% csrf_token %}
+  {{ comment_form.as_p }}
+  <input type="submit" value="Comment" />
+  </form>
+</div>
+
+<div style="width: 720px; float: left;">
 <div id="ios_{{ video.identifier }}" style="display: none;">
   <video id='movie' width='480' height='320' preload controls>
     <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.m4v' />
@@ -18,12 +51,24 @@
 <div id="nonios_{{ video.identifier }}" style="display: none;">
   <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.mp4'
      style='display:block;width:720px;height:480px;'
-     id='player_{{ video.identifier }}' />
+     id='player' />
   </a>
 </div>
 <script language="javascript">detectDevice('{{ video.identifier }}');</script>
 <br />
-{% if video.description %}
-  {{ video.description|safe }}
+{% if description %}
+<div style="border: 1px solid black; min-height: 5ex; background-color: #FAFFFA;">
+  <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px;" >
+      {{ video.original_filename }} |
+      {{ video.identifier }} |
+      {{ video.collection }} |
+      {{ video.date|naturalday }}
+  </div>
+  <div style="padding: 5px;">
+  {{ description|safe }}
+  </div>
+</div>
 {% endif %}
+</div>
+</div>
 {% endblock %}

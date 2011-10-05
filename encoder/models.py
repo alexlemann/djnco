@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_extensions.db.fields import UUIDField
+from django.contrib.auth.models import User
 
 from encoder.encode_tasks import encode_video, encode_audio
 
@@ -159,3 +160,16 @@ class Video(Media):
 
     def get_absolute_url(self):
         return reverse('demo_video', args=[self.identifier])
+
+class Comment(models.Model):
+    commenter = models.ForeignKey(User, related_name='comments')
+    media = models.ForeignKey('Media', related_name='commments')
+    created_time = models.DateTimeField(null=False, default=None)
+    last_modified_time = models.DateTimeField(null=False, default=None)
+    text = models.TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+      if not self.created_time:
+          self.created_time = datetime.datetime.now()
+      self.last_modified_time = datetime.datetime.now()
+      return super(Comment, self).save(*args, **kwargs)

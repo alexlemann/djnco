@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<form id='login' accept-charset='UTF-8' method='post' action=''>
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    <tr>
+        <td class='submit'>
+            <input type='submit' name='submit' value='Login &rarr;' />
+        </td>
+    </tr>
+    </table>
+
+</form>
+{% endblock %}

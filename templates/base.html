@@ -1,11 +1,23 @@
+{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>{% block title %}DJNCO{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css">
     {% block javascript %}{% endblock %}
 </head>
 <body>
-    <div id="content">
+    <div style="margin-bottom: 5px; border-bottom: 3px solid black; background-color: #DDE8DD; padding: 5px;">
+    <a href='{% url 'home' %}'>Media List</a>
+    <div style="float: right;">
+    {% if username %}
+      {{ username }} (<a href="{% url 'auth_logout' %}?next={% url 'home' %}">Logout</a>)
+    {% else %}
+      <a href="{% url 'auth_login' %}">Login</a>
+    {% endif %}
+    </div>
+    </div>
+    <div id="content" style="padding: 5px; background-color: #FAFFFA;">
         {% block content %}{% endblock %}
     </div>
 </body>

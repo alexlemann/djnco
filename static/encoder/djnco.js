@@ -2,7 +2,7 @@ function show_player(identifier) {
   var pre = 'http://libmarktest.dhcp.bsu.edu/uploads/published/';
   var url_low = pre + identifier + '-600.mp4'
   var url_high = pre + identifier + '-1024.mp4'
-  flowplayer('player_' + identifier, 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
+  flowplayer('player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
     clip: { 
       scaling: 'fit',
       urlResolvers: 'bwcheck',
@@ -41,7 +41,7 @@ function detectDevice(identifier) {
 function playAudio(identifier) {
   var pre = 'http://libmarktest.dhcp.bsu.edu/uploads/published/';
   var url = pre + identifier + '.mp3'
-  flowplayer('player_' + identifier, 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
+  flowplayer('player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
     clip: { 
       autoPlay: false,
       url : url,
