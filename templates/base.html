@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{% block title %}DJNCO{% endblock %}</title>
+    <title>{% block title %}Djnco{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css">
+    <link rel="stylesheet" type="text/css" href="/static/encoder/encoder.css">
     {% block javascript %}{% endblock %}
 </head>
-<body>
-    <div style="margin-bottom: 5px; border-bottom: 10px solid darkgray; background-color: #DDE8DD; padding: 5px;">
-    <a href='{% url 'home' %}'>Media List</a>
+<body onLoad="detectDevice('{{ video.identifier }}');">
+    <div style="margin-bottom: 5px; border-bottom: 5px solid darkgray; background-color: #DDE8DD; padding: 5px; height: 3ex;">
+    <a href='{% url 'home' %}'>Home</a>
     <div style="float: right;">
     {% if username %}
       {{ username }} (<a href="{% url 'auth_logout' %}?next={% url 'home' %}">Logout</a>)
@@ -17,7 +18,7 @@
     {% endif %}
     </div>
     </div>
-    <div id="content" style="padding: 5px; background-color: #FAFFFA;">
+    <div id="content" style="padding: 5px 0 0 5px; background-color: #FAFFFA;">
         {% block content %}{% endblock %}
     </div>
 </body>

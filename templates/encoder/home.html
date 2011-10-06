@@ -1,16 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
   <div style="float: left; padding: 10px 0px 0px 30px">
       <h3 style='margin-left: -20px;'>Videos:</h3>
-      {% for m in media %}
-      <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a>
-      {% if m.media_ptr.commments.count %}
-      ( {{ m.media_ptr.commments.count }} )
+      {% for v in videos %}
+      <a href="{{ v.get_absolute_url }}">{{ v.original_filename }}</a>
+      {% if v.media_ptr.commments.count %}
+      ( {{ v.media_ptr.commments.count }} )
       {% endif %}
       <br />
       {% endfor %}
+      <h3 style='margin-left: -20px;'>Sounds:</h3>
+      {% for s in sounds %}
+      <a href="{{ s.get_absolute_url }}">{{ s.original_filename }}</a>
+      {% if s.media_ptr.commments.count %}
+      ( {{ s.media_ptr.commments.count }} )
+      {% endif %}
+      <br />
+      {% endfor %}
+
   </div>
   <div style="float: right; padding: 10px 30px 0px 0px;">
       <h3 style='margin-left: -20px;'>Latest Comments:</h3>
@@ -21,7 +31,7 @@
       {{ c.commenter.username }}
       {% endif %}
       <a href="{% url demo_video identifier=c.media.identifier %}">
-      {{ c.created_time }}
+      {{ c.created_time|naturalday }}
       </a>
       <br />
       {% endfor %}

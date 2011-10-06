@@ -16,12 +16,17 @@
 {% endblock %}
 
 {% block content %}
-<div style="width: 970px">
-<div style="width: 240px; float: right; padding: 5px;">
+
+<div style="margin-left: 740px; min-width: 200px; position: absolute; top: 7ex;">
   {% for c in comments %}
-    <div style="border: 1px solid darkgray; margin: 8px;">
-      <div style="background-color: #DDE8DD; font-size: 70%;" >
-      <img src="/static/encoder/img/Silk_user_blue_online.png" style="height: 25px;" />
+    <div style="border: 1px solid lightgray; margin: 0 10px 8px 0;">
+      <div style="background-color: #DDE8DD; font-size: 70%; border: 2px solid lightgray;" >
+      <img src="/static/encoder/img/Silk_user_blue_online.png" style="height: 20px;" />
+      {% ifequal c.commenter.username username %}
+      <a href="{% url 'delete_comment' c.id %}">
+      <img src="/static/encoder/img/Silk_cross.png" style="float: right; margin: 1px 1px 0 0; height: 8px;"/>
+      </a>
+      {% endifequal %}
       {% if c.commenter.get_full_name %}
         {{ c.commenter.get_full_name }}
       {% else %}
@@ -30,45 +35,56 @@
       |
       {{ c.created_time|naturalday }}
       </div>
-      <div style="border-top: 1px solid darkgray; padding: 5px; background-color: #FAFFFA;">
+      <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
         <p>{{ c.text|link_seek }}</p>
       </div>
     </div>
   {% endfor %}
   <br />
-  <form action="{% url 'demo_video' video.identifier %}" method="post">{% csrf_token %}
-  {{ comment_form.as_p }}
-  <input type="submit" value="Comment" />
+  {% if username %}
+  <div style="border: 1px solid lightgray; margin: 0 10px 8px 0;">
+  <div style="background-color: #DDE8DD; border: 2px solid lightgray; height: 20px; padding: 3px;" >
+      Add A New Comment
+  </div>
+  <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
+  <form style="margin-right: 10px;" action="{% url 'demo_video' video.identifier %}" method="post">
+      {% csrf_token %}
+      {{ form.errors }}
+      {% for field in comment_form %}
+      {{ field.errors }}
+      {{ field }}
+      {% endfor %}
+      <br />
+      <input style="padding: 1px 3px 1px 3px;" type="submit" value="Comment" />
   </form>
+  </div>
+  </div>
+  {% endif %}
 </div>
 
-<div style="width: 720px; float: left;">
-<div id="ios_{{ video.identifier }}" style="display: none;">
-  <video id='movie' width='480' height='320' preload controls>
-    <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.m4v' />
-  </video>
-</div>
-<div id="nonios_{{ video.identifier }}" style="display: none;">
-  <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.mp4'
-     style='display:block;width:720px;height:480px;'
-     id='player' />
-  </a>
-</div>
-<script language="javascript">detectDevice('{{ video.identifier }}');</script>
-<br />
-{% if description %}
-<div style="border: 1px solid darkgray; min-height: 5ex; background-color: #FAFFFA;">
-  <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px;" >
+<div style="float: left; width: 720px; position: absolute; top: 7ex;"> 
+<div style="background-color: #FAFFFA; border: 1px solid lightgray;">
+  <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px; border: 2px solid lightgray;" >
       {{ video.original_filename }} |
       {{ video.identifier }} |
       {{ video.collection }} |
-      {{ video.date|naturalday }}
+      {{ video.encode_end_time|naturalday }}
   </div>
-  <div style="padding: 5px;">
-  {{ description|safe }}
+  <div id="ios_{{ video.identifier }}" style="display: none;">
+    <video id='movie' preload controls>
+      <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.m4v' />
+    </video>
   </div>
+  <div id="nonios_{{ video.identifier }}" style="display: none; height: 480px;">
+    <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.mp4' id='player' /> </a>
+  </div>
+  <script language="javascript"></script>
+  {% if description %}
+    <div style="padding: 5px 5px 5px 5px; border-top: 7px solid lightgray;">
+    {{ description|safe }}
+    </div>
+  {% endif %}
 </div>
-{% endif %}
 </div>
-</div>
+
 {% endblock %}
