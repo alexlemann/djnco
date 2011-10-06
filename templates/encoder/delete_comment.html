@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Are you sure you want to delete your comment?
+<br />
+<br />
+"{{ comment.text }}"
+<br />
+<br />
+<form style="margin-right: 10px;" action="{% url delete_comment_confirm comment_id=comment.id %}" method="post">
+    {% csrf_token %}
+    <input style="padding: 1px 3px 1px 3px;" type="submit" value="Delete" />
+</form>
+<form style="margin-right: 10px;" action="{% url home %}" method="post">
+    {% csrf_token %}
+    <input style="padding: 1px 3px 1px 3px;" type="submit" value="Cancel" />
+</form>
+{% endblock %}
