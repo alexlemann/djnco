@@ -30,7 +30,7 @@
       {% else %}
       {{ c.commenter.username }}
       {% endif %}
-      <a href="{% url demo_video identifier=c.media.identifier %}">
+      <a href="{{ c.media.get_absolute_url }}">
       {{ c.created_time|naturalday }}
       </a>
       <br />

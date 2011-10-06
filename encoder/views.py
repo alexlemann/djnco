@@ -4,6 +4,7 @@ from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.http import HttpResponseForbidden
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 from encoder import models as encoder 
 from encoder import forms as forms
@@ -15,33 +16,30 @@ def get_username(request):
     else:
         return None
 
-def demo_video(request, identifier):
-    v = encoder.Video.objects.get(identifier=identifier)
-    comments = v.media_ptr.commments.order_by('created_time')
+def media_player(request, identifier):
+    media = encoder.Media.objects.get(identifier=identifier)
+    comments = media.commments.order_by('created_time')
     comment_form = forms.CommentForm()
     if request.POST:
       comment_form = forms.CommentForm(request.POST, request=request)
       if comment_form.is_valid():
         comment_form.instance.commenter = request.user
-        comment_form.instance.media = v.media_ptr
+        comment_form.instance.media = media
         comment_form.save()
 
     context = RequestContext(request, {
       'username' : get_username(request),
-      'video' : v,
+      'media' : media,
       'comments' : comments,
-      'description' : link_seek(v.description),
+      'description' : link_seek(media.description),
       'comment_form': comment_form
     })
-    return render_to_response('encoder/demo/video.html', context)
+    try:
+        v = media.video
+        return render_to_response('encoder/demo/video_player.html', context)
+    except ObjectDoesNotExist:
+        return render_to_response('encoder/demo/audio_player.html', context)
 
-def demo_audio(request, identifier):
-    a = encoder.Audio.objects.get(identifier=identifier)
-    comments = a.media_ptr.commments.all()
-    if a.description:
-        add_seek_links(a)
-    return render_to_response('encoder/demo/audio.html', {'audio' : a,
-                                                          'comments': comments})
 def delete_comment(request, comment_id):
     comment = get_object_or_404(encoder.Comment, id=comment_id)
     if comment.commenter != request.user:

@@ -1,0 +1,16 @@
+{% extends "encoder/demo/base.html" %}
+
+{% block player %}
+  <div id="ios_{{ media.identifier }}" style="display: none;">
+    <video id='movie' preload controls>
+      <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ media.identifier }}-600.m4v' />
+    </video>
+    <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ media.identifier }}-600.mp4' />Play Locally</a>
+  </div>
+  <div id="nonios_{{ media.identifier }}" style="display: none; height: 480px;">
+    <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ media.identifier }}-600.mp4' id='player' /></a>
+  </div>
+  <script type="text/javascript">
+    detectDevice('{{ media.identifier }}');
+ </script>
+{% endblock %}

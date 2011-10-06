@@ -47,7 +47,7 @@
       Add A New Comment
   </div>
   <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
-  <form style="margin-right: 10px;" action="{% url 'demo_video' video.identifier %}" method="post">
+  <form style="margin-right: 10px;" action="{% url 'media_player' media.identifier %}" method="post">
       {% csrf_token %}
       {{ form.errors }}
       {% for field in comment_form %}
@@ -65,19 +65,13 @@
 <div style="float: left; width: 720px; position: absolute; top: 7ex;"> 
 <div style="background-color: #FAFFFA; border: 1px solid lightgray;">
   <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px; border: 2px solid lightgray;" >
-      {{ video.original_filename }} |
-      {{ video.identifier }} |
-      {{ video.collection }} |
-      {{ video.encode_end_time|naturalday }}
+      {{ media.original_filename }} |
+      {{ media.identifier }} |
+      {{ media.collection }} |
+      {{ media.encode_end_time|naturalday }}
   </div>
-  <div id="ios_{{ video.identifier }}" style="display: none;">
-    <video id='movie' preload controls>
-      <source src='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.m4v' />
-    </video>
-  </div>
-  <div id="nonios_{{ video.identifier }}" style="display: none; height: 480px;">
-    <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ video.identifier }}-300.mp4' id='player' /> </a>
-  </div>
+  {% block player %}
+  {% endblock %}
   <script language="javascript"></script>
   {% if description %}
     <div style="padding: 5px 5px 5px 5px; border-top: 7px solid lightgray;">

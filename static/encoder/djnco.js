@@ -41,7 +41,7 @@ function detectDevice(identifier) {
 function playAudio(identifier) {
   var pre = 'http://libmarktest.dhcp.bsu.edu/uploads/published/';
   var url = pre + identifier + '.mp3'
-  flowplayer('player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
+  flowplayer('audio_player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
     clip: { 
       autoPlay: false,
       url : url,

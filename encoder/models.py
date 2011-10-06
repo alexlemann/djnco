@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_extensions.db.fields import UUIDField
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 from encoder.encode_tasks import encode_video, encode_audio
 
@@ -110,6 +111,9 @@ class Media(models.Model):
     def view_on_site(self):
         return ''
 
+    def get_absolute_url(self):
+        return reverse('media_player', args=[self.identifier])
+
     def save(self, *args, **kwargs):
         self.original_filename = os.path.basename(self.upload.name)
         self.upload.filename = self.identifier
@@ -130,13 +134,13 @@ class Audio(Media):
 
     def view_on_site(self):
         if self.encoding_finished:
-            return '<a href="' + reverse('demo_audio', kwargs={'identifier':self.identifier}) + '">Preview</a>'
+            return '<a href="' + reverse('media_player', kwargs={'identifier':self.identifier}) + '">Preview</a>'
         else:
             return 'Preview'
     view_on_site.allow_tags = True
 
     def get_absolute_url(self):
-        return reverse('demo_audio', args=[self.identifier])
+        return reverse('media_player', args=[self.identifier])
 
 class Video(Media):
     def encode(self):
@@ -153,13 +157,13 @@ class Video(Media):
 
     def view_on_site(self):
         if self.encoding_finished:
-            return '<a href="' + reverse('demo_video', kwargs={'identifier':self.identifier}) + '">Preview</a>'
+            return '<a href="' + reverse('media_player', kwargs={'identifier':self.identifier}) + '">Preview</a>'
         else:
             return 'Preview'
     view_on_site.allow_tags = True
 
     def get_absolute_url(self):
-        return reverse('demo_video', args=[self.identifier])
+        return reverse('media_player', args=[self.identifier])
 
 class Comment(models.Model):
     commenter = models.ForeignKey(User, related_name='comments')
