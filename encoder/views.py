@@ -52,13 +52,9 @@ def delete_comment(request, comment_id):
 
 def delete_comment_confirm(request, comment_id):
     comment = get_object_or_404(encoder.Comment, id=comment_id)
-    print 'post?'
     if request.POST:
-        print 'post!'
         if comment.commenter != request.user:
-            print 'access denied'
             return HttpResponseForbidden()
-        print 'delete'
         comment.delete()
     return redirect(reverse('home'))
 
