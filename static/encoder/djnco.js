@@ -48,7 +48,22 @@ function playAudio(identifier) {
     },
     plugins: { 
       audio: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.audio-3.2.2.swf' },
-      controls: { fullscreen: false, height: 25, autoHide: false}
+      controls: { 
+          fullscreen: false,
+          height: 25,
+          autoHide: false
+      }
     }
   });
+}
+
+function seek(time) {
+    if ($f('player').isPlaying()) {
+      $f('player').seek(time);
+    } else { 
+      $f('player').play(); 
+      setTimeout(function() {
+        $f('player').seek(time);
+      }, (500));
+    }
 }
