@@ -59,8 +59,8 @@ def delete_comment_confirm(request, comment_id):
     return redirect(reverse('home'))
 
 def home(request):
-    videos = encoder.Video.objects.order_by('-encode_end_time')
-    sounds = encoder.Audio.objects.order_by('-encode_end_time')
+    videos = encoder.Video.objects.filter(encoding_finished=True).order_by('-encode_end_time')
+    sounds = encoder.Audio.objects.filter(encoding_finished=True).order_by('-encode_end_time')
     comments = encoder.Comment.objects.order_by('-created_time')[:10]
     context = {
         'videos' : videos,
