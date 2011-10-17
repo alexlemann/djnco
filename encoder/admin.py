@@ -1,6 +1,7 @@
 from django.contrib import admin
 from djnco.encoder import models as encoder
 
+
 class CollectionAdmin(admin.ModelAdmin):
     readonly_fields = ('to_be_encoded', 'encode_button', 'to_be_imported',
         'import_button', )
@@ -25,6 +26,7 @@ class CollectionAdmin(admin.ModelAdmin):
             return self.fieldsets + self.change_fieldsets
 admin.site.register(encoder.Collection, CollectionAdmin)
 
+
 class MediaAdmin(admin.ModelAdmin):
     readonly_fields = ('get_identifier', 'original_filename',
         'encoding_started', 'encoding_finished', 'queued_time',
@@ -35,12 +37,12 @@ class MediaAdmin(admin.ModelAdmin):
     list_filter = ('collection', )
     fieldsets = (
         (None, {
-            'fields': 
-              ('original_filename', 'collection', 'get_identifier', 
+            'fields':
+              ('original_filename', 'collection', 'get_identifier',
                'date', 'title', 'description', ),
         }),
         ('Timing', {
-            'fields': 
+            'fields':
               ('queued_time', 'encode_start_time', 'encode_end_time', ),
         }), )
 admin.site.register(encoder.Video, MediaAdmin)

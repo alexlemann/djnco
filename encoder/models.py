@@ -11,14 +11,16 @@ import os
 import datetime
 import shutil
 
+
 class Collection(models.Model):
     slug = models.SlugField(max_length=20, unique=True)
 
     def encode(self):
-        for v in Video.objects.filter(collection=self, encoding_started=False, encoding_finished=False):
-            v.encode()
-        for a in Audio.objects.filter(collection=self, encoding_started=False, encoding_finished=False):
-            a.encode()
+        query = Q(collection=self, encoding_started=False)
+        media = list(Video.objects.filter(query))
+        media += list(Audio.objects.filter(query))
+        for m in media:
+            m.encode()
 
     def import_media(self):
         files = os.listdir(settings.UPLOAD_DIR + self.slug + '/')
@@ -56,7 +58,7 @@ class Collection(models.Model):
     to_be_imported.allow_tags = True
 
     def import_button(self):
-        return '<a href="/encoder/import_collection/' + self.slug + '">Import</a>'
+        return '<a href="/encoder/import_collection/'%s'>Import</a>' % (self.slug)
     import_button.short_description = 'Uploaded Files'
     import_button.allow_tags = True
 
@@ -70,12 +72,13 @@ class Collection(models.Model):
     to_be_encoded.allow_tags = True
 
     def encode_button(self):
-        return '<a href="/encoder/encode_collection/' + self.slug + '">Start Encoding</a>'
+        return '<a href="/encoder/encode_collection/%s">Encode</a>' % (self.slug)
     encode_button.short_description = 'Encode Them'
     encode_button.allow_tags = True
 
     def __unicode__(self):
         return self.slug
+
 
 class Media(models.Model):
     def encode_src(self, *args):
@@ -119,6 +122,7 @@ class Media(models.Model):
         self.upload.filename = self.identifier
         return super(Media, self).save(*args, **kwargs)
 
+
 class Audio(Media):
     def encode(self):
         self.queued_time = datetime.datetime.now()
@@ -127,20 +131,27 @@ class Audio(Media):
         encode_audio.delay(self)
 
     def encode_dst(self, bitrate):
-        return os.path.join(settings.ENCODEDST_DIR, self.identifier) + '-' + str(bitrate) + '.mp3'
+        path = os.path.join(settings.ENCODEDST_DIR, self.identifier)
+        path += '-' + bitrate + '.mp3'
+        return path
 
     def publish_path(self, bitrate):
-        return os.path.join(settings.PUBLISH_DIR, self.identifier) + '-' + str(bitrate) + '.mp3'
+        path = os.path.join(settings.PUBLISH_DIR, self.identifier)
+        path += '-' + bitrate + '.mp3'
+        return path
 
     def view_on_site(self):
         if self.encoding_finished:
-            return '<a href="' + reverse('media_player', kwargs={'identifier':self.identifier}) + '">Preview</a>'
+            player_url = reverse('media_player',
+                                 kwargs={'identifier': self.identifier})
+            return '<a href="%s">Preview</a>' % (player_url)
         else:
             return 'Preview'
     view_on_site.allow_tags = True
 
     def get_absolute_url(self):
         return reverse('media_player', args=[self.identifier])
+
 
 class Video(Media):
     def encode(self):
@@ -150,20 +161,27 @@ class Video(Media):
         encode_video.delay(self)
 
     def encode_dst(self, bitrate):
-        return os.path.join(settings.ENCODEDST_DIR, self.identifier) + '-' + bitrate + '.mp4'
+        path = os.path.join(settings.ENCODEDST_DIR, self.identifier)
+        path += '-' + bitrate + '.mp4'
+        return path
 
     def publish_path(self, bitrate):
-        return os.path.join(settings.PUBLISH_DIR, self.identifier) + '-' + bitrate + '.mp4'
+        path = os.path.join(settings.PUBLISH_DIR, self.identifier)
+        path += '-' + bitrate + '.mp4'
+        return path
 
     def view_on_site(self):
         if self.encoding_finished:
-            return '<a href="' + reverse('media_player', kwargs={'identifier':self.identifier}) + '">Preview</a>'
+            player_url = reverse('media_player',
+                                 kwargs={'identifier': self.identifier})
+            return '<a href="%s">Preview</a>' % (player_url)
         else:
             return 'Preview'
     view_on_site.allow_tags = True
 
     def get_absolute_url(self):
         return reverse('media_player', args=[self.identifier])
+
 
 class Comment(models.Model):
     commenter = models.ForeignKey(User, related_name='comments')
@@ -173,7 +191,7 @@ class Comment(models.Model):
     text = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-      if not self.created_time:
-          self.created_time = datetime.datetime.now()
-      self.last_modified_time = datetime.datetime.now()
-      return super(Comment, self).save(*args, **kwargs)
+        if not self.created_time:
+            self.created_time = datetime.datetime.now()
+        self.last_modified_time = datetime.datetime.now()
+        return super(Comment, self).save(*args, **kwargs)

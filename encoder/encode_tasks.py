@@ -5,7 +5,8 @@ import datetime
 
 from django.conf import settings
 
-from celery.task import task 
+from celery.task import task
+
 
 @task(name="encode-video")
 def encode_video(video):
@@ -33,6 +34,7 @@ def encode_video(video):
     video.encoding_finished = True
     video.save()
     os.remove(video.encode_src())
+
 
 @task(name="encode-audio")
 def encode_audio(audio, bitrate=128):
