@@ -2,6 +2,7 @@ from django import forms
 
 from encoder import models as encoder
 
+
 class CommentForm(forms.ModelForm):
     text = forms.CharField(label='New Comment', widget=forms.Textarea)
 
