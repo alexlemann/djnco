@@ -58,7 +58,9 @@ class Collection(models.Model):
     to_be_imported.allow_tags = True
 
     def import_button(self):
-        return '<a href="/encoder/import_collection/'%s'>Import</a>' % (self.slug)
+        import_url = reverse('import_collection',
+                             kwargs={collection_slug: self.slug})
+        return '<a href="%s">Import</a>' % (import_url)
     import_button.short_description = 'Uploaded Files'
     import_button.allow_tags = True
 
@@ -72,7 +74,9 @@ class Collection(models.Model):
     to_be_encoded.allow_tags = True
 
     def encode_button(self):
-        return '<a href="/encoder/encode_collection/%s">Encode</a>' % (self.slug)
+        encode_url = reverse('encode_collection',
+                             kwargs={collection_slug: self.slug})
+        return '<a href="%s">Encode</a>' % (encode_url)
     encode_button.short_description = 'Encode Them'
     encode_button.allow_tags = True
 
