@@ -5,35 +5,60 @@
 {% block content %}
   <div style="float: left; padding: 10px 0px 0px 30px">
       <h3 style='margin-left: -20px;'>Videos:</h3>
+      <table>
       {% for v in videos %}
+      <tr>
+      <td style="padding-right: 1.5em">{{ v.encode_end_time|naturalday }}</td>
+      <td style="padding-right: 1.5em">
       <a href="{{ v.get_absolute_url }}">{{ v.original_filename }}</a>
+      </td>
+      <td>
       {% if v.media_ptr.commments.count %}
-      ( {{ v.media_ptr.commments.count }} )
+      {{ v.media_ptr.commments.count }}
       {% endif %}
-      <br />
+      </td>
+      </tr>
+      </td>
       {% endfor %}
-      <h3 style='margin-left: -20px;'>Sounds:</h3>
+      </table>
+      <h3 style='margin-left: -20px; margin-top: 3ex;'>Sounds:</h3>
+      <table>
       {% for s in sounds %}
+      <tr>
+      <td style="padding-right: 1.5em">{{ s.encode_end_time|naturalday }}</td>
+      <td>
+      <td style="padding-right: 1.5em;">
       <a href="{{ s.get_absolute_url }}">{{ s.original_filename }}</a>
+      </td>
+      <td>
       {% if s.media_ptr.commments.count %}
-      ( {{ s.media_ptr.commments.count }} )
+      {{ s.media_ptr.commments.count }}
       {% endif %}
-      <br />
+      </td>
+      </tr>
       {% endfor %}
+      </table>
 
   </div>
   <div style="float: right; padding: 10px 30px 0px 0px;">
       <h3 style='margin-left: -20px;'>Latest Comments:</h3>
+      <table>
       {% for c in comments %}
+      <tr>
+      <td style="padding-right: 1.5em">
       {% if c.commenter.get_full_name %}
       {{ c.commenter.get_full_name }}
       {% else %}
       {{ c.commenter.username }}
       {% endif %}
+      </td>
+      <td>
       <a href="{{ c.media.get_absolute_url }}">
       {{ c.created_time|naturalday }}
       </a>
-      <br />
+      </td>
+      </tr>
       {% endfor %}
+      <table>
   </div>
 {% endblock %}
