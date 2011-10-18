@@ -1,15 +1,16 @@
+import os
+import datetime
+import shutil
+
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django_extensions.db.fields import UUIDField
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import File
 
 from encoder.encode_tasks import encode_video, encode_audio
-
-import os
-import datetime
-import shutil
 
 
 class Collection(models.Model):
@@ -34,7 +35,6 @@ class Collection(models.Model):
                         media = Audio(collection=self, upload=orig_path)
                     media.save()
                     shutil.move(orig_path, media.encode_src())
-                    from django.core.files.base import File
                     media.upload.file = File(media.encode_src())
                     media.save()
 
