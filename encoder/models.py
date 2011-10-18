@@ -17,18 +17,19 @@ class Collection(models.Model):
     slug = models.SlugField(max_length=20, unique=True)
 
     def encode(self):
-        query = Q(collection=self, encoding_started=False)
+        query = models.Q(collection=self, encoding_started=False)
         media = list(Video.objects.filter(query))
         media += list(Audio.objects.filter(query))
         for m in media:
             m.encode()
 
     def import_media(self):
-        files = os.listdir(settings.UPLOAD_DIR + self.slug + '/')
+        collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
+        files = os.listdir(collection_path)
         for f in files:
             for media_type, extensions in settings.INCOMING_FORMATS.items():
                 if any([f.endswith(ext) for ext in extensions]):
-                    orig_path = os.path.join(settings.UPLOAD_DIR, self.slug, f)
+                    orig_path = os.path.join(collection_path, f)
                     if media_type == 'video':
                         media = Video(collection=self, upload=orig_path)
                     elif media_type == 'audio':
@@ -40,7 +41,8 @@ class Collection(models.Model):
 
     def to_be_imported(self):
         try:
-            files = os.listdir(settings.UPLOAD_DIR + self.slug + '/')
+            collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
+            files = os.listdir(collection_path)
         except OSError:
             return 'Directory: ' + self.slug + ' not found'
         for f in files:
@@ -59,7 +61,7 @@ class Collection(models.Model):
 
     def import_button(self):
         import_url = reverse('import_collection',
-                             kwargs={collection_slug: self.slug})
+                             kwargs={'collection_slug': self.slug})
         return '<a href="%s">Import</a>' % (import_url)
     import_button.short_description = 'Uploaded Files'
     import_button.allow_tags = True
@@ -75,7 +77,7 @@ class Collection(models.Model):
 
     def encode_button(self):
         encode_url = reverse('encode_collection',
-                             kwargs={collection_slug: self.slug})
+                             kwargs={'collection_slug': self.slug})
         return '<a href="%s">Encode</a>' % (encode_url)
     encode_button.short_description = 'Encode Them'
     encode_button.allow_tags = True
