@@ -31,11 +31,11 @@ def media_player(request, identifier):
             comment_form.save()
 
     context = RequestContext(request, {
-      'username': get_username(request),
-      'media': media,
-      'comments': comments,
-      'description': link_seek(media.description),
-      'comment_form': comment_form
+        'username': get_username(request),
+        'media': media,
+        'comments': comments,
+        'description': link_seek(media.description),
+        'comment_form': comment_form
     })
     try:
         v = media.video
