@@ -14,6 +14,7 @@ function show_player(identifier) {
       ],
     },
     plugins: { 
+      controls: { autoHide: false },
       pseudo: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' },
       viral: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.viralvideos-3.2.5.swf' },
       bwcheck: {
