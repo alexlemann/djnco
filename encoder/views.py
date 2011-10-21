@@ -29,13 +29,18 @@ def media_player(request, identifier):
             comment_form.instance.commenter = request.user
             comment_form.instance.media = media
             comment_form.save()
-
+    
+    seek_time = request.GET.get('time', None)
+    if seek_time:
+        min, sec = seek_time.split(':')
+        seek_time = int(min)*60 + int(sec)
     context = RequestContext(request, {
         'username': get_username(request),
         'media': media,
         'comments': comments,
         'description': link_seek(media.description),
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'seek_time': seek_time
     })
     try:
         v = media.video

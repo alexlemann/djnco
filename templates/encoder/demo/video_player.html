@@ -11,6 +11,15 @@
     <a href='http://libmarktest.dhcp.bsu.edu/uploads/published/{{ media.identifier }}-600.mp4' id='player' /></a>
   </div>
   <script type="text/javascript">
-    detectDevice('{{ media.identifier }}');
+    $("document").ready(function() {
+      $(".seeklink").click(function(event) { event.preventDefault(); });
+      detectDevice('{{ media.identifier }}');
+      {% if seek_time %}
+       $f('player').play();
+       setTimeout(function() {
+         $f('player').seek({{seek_time}});
+       }, (1500));
+      {% endif %}
+    });
  </script>
 {% endblock %}

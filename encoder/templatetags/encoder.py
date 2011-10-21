@@ -10,7 +10,7 @@ def link_seek(value):
       return None
   for mins, secs in re.findall("(\d\d?):(\d\d)", value):
     time = int(mins)*60 + int(secs)
-    link = """<a href="#" onClick="seek(%s);">%s:%s</a>""" % (str(time), mins, secs)
+    link = """<a class="seeklink" href="?time=%s:%s" onClick="seek(%s);">%s:%s</a>""" % (mins, secs, str(time), mins, secs)
     value = value.replace(":".join((mins,secs)), link)
   return mark_safe(value)
 register.filter('link_seek', link_seek)
