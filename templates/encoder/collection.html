@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+  <div style="float: left; padding: 10px 0px 0px 30px">
+      <h3 style='margin-left: -20px;'>Media:</h3>
+      <div style="min-height: 20ex;">
+      <table>
+      {% for m in page.object_list %}
+      <tr>
+          <td style="padding-right: 1.5em">
+              {% if m.video %}
+              v
+              {% else %}
+              a
+              {% endif %}
+          </td>
+      <td style="padding-right: 1.5em">{{ m.encode_end_time|naturalday }}</td>
+      <td style="padding-right: 1.5em">
+      <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a>
+      </td>
+      <td>
+      {% if m.media_ptr.commments.count %}
+      {{ m.media_ptr.commments.count }}
+      {% endif %}
+      </td>
+      </tr>
+      </td>
+      {% endfor %}
+      </table>
+  </div>
+      <br />
+
+      {% ifnotequal page.paginator.num_pages 1 %}
+      {% if page.has_previous %}
+      <a href="?page={{ page.previous_page_number }}">previous</a>
+      {% else %}
+      previous
+      {% endif %}
+      Page {{ page.number }} of {{ page.paginator.num_pages }}.
+      {% if page.has_next %}
+      <a href="?page={{ page.next_page_number }}">next</a>
+      {% else %}
+      next 
+      {% endif %}
+      {% endifnotequal %}
+  </div>
+  <div style="float: right; padding: 10px 30px 0px 0px;">
+      <h3 style='margin-left: -20px;'>Latest Comments:</h3>
+      <table>
+      {% for c in comments %}
+      <tr>
+      <td style="padding-right: 1.5em">
+      {% if c.commenter.get_full_name %}
+      {{ c.commenter.get_full_name }}
+      {% else %}
+      {{ c.commenter.username }}
+      {% endif %}
+      </td>
+      <td>
+      <a href="{{ c.media.get_absolute_url }}">
+      {{ c.created_time|naturalday }}
+      </a>
+      </td>
+      </tr>
+      {% endfor %}
+      <table>
+  </div>
+{% endblock %}
