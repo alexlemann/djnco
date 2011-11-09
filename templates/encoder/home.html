@@ -4,41 +4,14 @@
 
 {% block content %}
   <div style="float: left; padding: 10px 0px 0px 30px">
-      <h3 style='margin-left: -20px;'>Videos:</h3>
+      <h3 style='margin-left: -20px;'>Collections:</h3>
       <table>
-      {% for v in videos %}
+      {% for c in collections %}
       <tr>
-      <td style="padding-right: 1.5em">{{ v.encode_end_time|naturalday }}</td>
-      <td style="padding-right: 1.5em">
-      <a href="{{ v.get_absolute_url }}">{{ v.original_filename }}</a>
-      </td>
-      <td>
-      {% if v.media_ptr.commments.count %}
-      {{ v.media_ptr.commments.count }}
-      {% endif %}
-      </td>
-      </tr>
-      </td>
-      {% endfor %}
-      </table>
-      <h3 style='margin-left: -20px; margin-top: 3ex;'>Sounds:</h3>
-      <table>
-      {% for s in sounds %}
-      <tr>
-      <td style="padding-right: 1.5em">{{ s.encode_end_time|naturalday }}</td>
-      <td>
-      <td style="padding-right: 1.5em;">
-      <a href="{{ s.get_absolute_url }}">{{ s.original_filename }}</a>
-      </td>
-      <td>
-      {% if s.media_ptr.commments.count %}
-      {{ s.media_ptr.commments.count }}
-      {% endif %}
-      </td>
+          <td style="padding-right: 1.5em;"><a href="{{ c.get_absolute_url }}">{{ c.slug }}</a></td><td>{{ c.media.count }}</td>
       </tr>
       {% endfor %}
       </table>
-
   </div>
   <div style="float: right; padding: 10px 30px 0px 0px;">
       <h3 style='margin-left: -20px;'>Latest Comments:</h3>
@@ -52,10 +25,13 @@
       {{ c.commenter.username }}
       {% endif %}
       </td>
-      <td>
+      <td style="padding-right: 1.5em">
       <a href="{{ c.media.get_absolute_url }}">
-      {{ c.created_time|naturalday }}
+          {{ c.media.original_filename }}
       </a>
+      </td>
+      <td>
+      {{ c.created_time|naturalday }}
       </td>
       </tr>
       {% endfor %}

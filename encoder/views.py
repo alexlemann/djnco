@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from encoder import models as encoder
 from encoder import forms as forms
@@ -70,20 +71,36 @@ def delete_comment_confirm(request, comment_id):
 
 
 def home(request):
-    videos = encoder.Video.objects.filter(
-        encoding_finished=True
-    ).order_by('-encode_end_time')
-    sounds = encoder.Audio.objects.filter(
-        encoding_finished=True
-    ).order_by('-encode_end_time')
+    collections = encoder.Collection.objects.order_by('slug')
     comments = encoder.Comment.objects.order_by('-created_time')[:10]
     context = {
-        'videos': videos,
-        'sounds': sounds,
         'username': get_username(request),
-        'comments': comments
+        'comments': comments,
+        'collections': collections,
     }
     return render_to_response('encoder/home.html', context)
+
+
+def collection(request, collection_slug):
+    collection = encoder.Collection.objects.get(slug=collection_slug)
+    comments = encoder.Comment.objects.filter(media__collection=collection
+                                             ).order_by('-created_time')[:10]
+    media = collection.media.filter(collection=collection,
+                                    encoding_finished=True
+                                   ).order_by('-encode_end_time')
+    paginator = Paginator(media, 10)
+    page = request.GET.get('page', 1)
+    try:
+        page = paginator.page(page)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+    context = {
+        'comments': comments,
+        'page': page,
+    }
+    return render_to_response('encoder/collection.html', context)
 
 
 @login_required

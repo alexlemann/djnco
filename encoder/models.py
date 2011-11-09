@@ -82,6 +82,9 @@ class Collection(models.Model):
     encode_button.short_description = 'Encode Them'
     encode_button.allow_tags = True
 
+    def get_absolute_url(self):
+        return reverse('collection', args=[self.slug])
+
     def __unicode__(self):
         return self.slug
 

@@ -11,9 +11,9 @@
       <tr>
           <td style="padding-right: 1.5em">
               {% if m.video %}
-              v
+              <img src="/static/encoder/img/Silk_film.png"/>
               {% else %}
-              a
+              <img src="/static/encoder/img/Silk_sound.png"/>
               {% endif %}
           </td>
       <td style="padding-right: 1.5em">{{ m.encode_end_time|naturalday }}</td>
@@ -21,8 +21,8 @@
       <a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a>
       </td>
       <td>
-      {% if m.media_ptr.commments.count %}
-      {{ m.media_ptr.commments.count }}
+      {% if m.commments.count %}
+      {{ m.commments.count }}
       {% endif %}
       </td>
       </tr>
@@ -34,15 +34,15 @@
 
       {% ifnotequal page.paginator.num_pages 1 %}
       {% if page.has_previous %}
-      <a href="?page={{ page.previous_page_number }}">previous</a>
+      <a style="text-decoration: none;" href="?page={{ page.previous_page_number }}">&larr;</a>
       {% else %}
-      previous
+      <span style="font-size: 50%;">&larr;</span>
       {% endif %}
-      Page {{ page.number }} of {{ page.paginator.num_pages }}.
+      {{ page.number }} / {{ page.paginator.num_pages }}
       {% if page.has_next %}
-      <a href="?page={{ page.next_page_number }}">next</a>
+      <a style="text-decoration: none;" href="?page={{ page.next_page_number }}">&rarr;</a>
       {% else %}
-      next 
+      <span style="font-size: 50%;">&rarr;</span>
       {% endif %}
       {% endifnotequal %}
   </div>
