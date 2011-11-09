@@ -67,7 +67,7 @@
   <div style="background-color: #DDE8DD; font-size: 70%; padding: 3px; border: 2px solid lightgray;" >
       {{ media.original_filename }} |
       {{ media.identifier }} |
-      {{ media.collection }} |
+      <a href="{{ media.collection.get_absolute_url }}">{{ media.collection }}</a> |
       {{ media.encode_end_time|naturalday }}
   </div>
   {% block player %}
