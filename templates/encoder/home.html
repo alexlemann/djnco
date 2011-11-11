@@ -3,7 +3,16 @@
 {% load humanize %}
 
 {% block content %}
-  <div style="float: left; padding: 10px 0px 0px 30px">
+  <center style="padding: 30px">
+  <form method="get" action="" accept-charset="utf-8">
+      <input type="text" name="q" />
+      <input type="submit" value="Search" />
+  </form>
+  {% if search_query %}
+      {{ search_query }}   <a href="{% url home %}"><img src="/static/encoder/img/Silk_cross.png" style="height: 8px"></img></a>
+  {% endif %}
+  </center>
+  <div style="float: left; padding: 10px 0px 0px 30px;">
       <h3 style='margin-left: -20px;'>Collections:</h3>
       <table>
       {% for c in collections %}
@@ -12,6 +21,17 @@
       </tr>
       {% endfor %}
       </table>
+
+      {% if media %}
+      <h3 style='margin-left: -20px; padding-top: 30px;'>Items:</h3>
+      <table>
+      {% for m in media %}
+      <tr>
+          <td><a href="{{ m.get_absolute_url }}">{{ m.original_filename }}</a></td>
+      </tr>
+      {% endfor %}
+      </table>
+      {% endif %}
   </div>
   <div style="float: right; padding: 10px 30px 0px 0px;">
       <h3 style='margin-left: -20px;'>Latest Comments:</h3>

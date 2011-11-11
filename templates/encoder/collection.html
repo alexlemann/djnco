@@ -3,6 +3,15 @@
 {% load humanize %}
 
 {% block content %}
+  <center style="padding: 30px">
+  <form method="get" action="" accept-charset="utf-8">
+      <input type="text" name="q" />
+      <input type="submit" value="Search" />
+  </form>
+  {% if search_query %}
+      {{ search_query }}   <a href="{% url collection collection.slug %}"><img src="/static/encoder/img/Silk_cross.png" style="height: 8px"></img></a>
+  {% endif %}
+  </center>
   <div style="float: left; padding: 10px 0px 0px 30px">
       <h3 style='margin-left: -20px;'>Media:</h3>
       <div style="min-height: 20ex;">
@@ -34,13 +43,21 @@
 
       {% ifnotequal page.paginator.num_pages 1 %}
       {% if page.has_previous %}
+      {% if search_query %}
+      <a style="text-decoration: none;" href="?page={{ page.previous_page_number }}&q={{ search_query }}">&larr;</a>
+      {% else %}
       <a style="text-decoration: none;" href="?page={{ page.previous_page_number }}">&larr;</a>
+      {% endif %}
       {% else %}
       <span style="font-size: 50%;">&larr;</span>
       {% endif %}
       {{ page.number }} / {{ page.paginator.num_pages }}
       {% if page.has_next %}
+      {% if search_query %}
+      <a style="text-decoration: none;" href="?page={{ page.next_page_number }}&q={{ search_query }}">&rarr;</a>
+      {% else %}
       <a style="text-decoration: none;" href="?page={{ page.next_page_number }}">&rarr;</a>
+      {% endif %}
       {% else %}
       <span style="font-size: 50%;">&rarr;</span>
       {% endif %}
