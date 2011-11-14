@@ -7,6 +7,7 @@ from django.db import models
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from encoder import models as encoder
 from encoder import forms as forms
@@ -70,24 +71,53 @@ def delete_comment_confirm(request, comment_id):
     return redirect(reverse('home'))
 
 
+def media_query(t):
+    return Q(title__icontains=t) | Q(description__icontains=t) | Q(original_filename__icontains=t)
+
+def comments_query(t):
+    return Q(text__icontains=t)
+
+def collections_query(t):
+    return Q(slug__icontains=t)
+
+def search(query, query_func, qs):
+    q = Q()
+    for t in query.split(' '):
+        q |= query_func(t)
+    return qs.filter(q)
+
 def home(request):
     collections = encoder.Collection.objects.order_by('slug')
     comments = encoder.Comment.objects.order_by('-created_time')[:10]
+    media = encoder.Media.objects.none
+    search_query = request.GET.get('q', None)
     context = {
         'username': get_username(request),
         'comments': comments,
         'collections': collections,
+        'media': media,
+        'search_query': search_query,
     }
+    if search_query:
+        context.update({
+            'collections': search(search_query, collections_query,
+                                 encoder.Collection.objects.all().order_by('slug')),
+            'comments': search(search_query, comments_query,
+                               encoder.Comment.objects.all().order_by('-created_time')),
+            'media': search(search_query, media_query,
+                            encoder.Media.objects.filter(encoding_finished=True).order_by('-encode_start_time')),
+        })
     return render_to_response('encoder/home.html', context)
 
 
 def collection(request, collection_slug):
     collection = encoder.Collection.objects.get(slug=collection_slug)
-    comments = encoder.Comment.objects.filter(media__collection=collection
-                                             ).order_by('-created_time')[:10]
-    media = collection.media.filter(collection=collection,
-                                    encoding_finished=True
-                                   ).order_by('-encode_end_time')
+    comments = encoder.Comment.objects.filter(media__collection=collection).order_by('-created_time')[:15]
+    search_query = request.GET.get('q', None)
+    if search_query:
+        media = search(search_query, media_query, encoder.Media.objects.filter(collection=collection))
+    else:
+        media = collection.media.filter(encoding_finished=True).order_by('-encode_end_time')
     paginator = Paginator(media, 10)
     page = request.GET.get('page', 1)
     try:
@@ -99,6 +129,8 @@ def collection(request, collection_slug):
     context = {
         'comments': comments,
         'page': page,
+        'collection': collection,
+        'search_query': search_query,
     }
     return render_to_response('encoder/collection.html', context)
 
