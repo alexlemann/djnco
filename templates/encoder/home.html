@@ -32,6 +32,26 @@
       {% endfor %}
       </table>
       {% endif %}
+
+      {% if received %}
+      <h3 style='margin-left: -20px; padding-top: 30px;'>Notification Inbox:</h3>
+      <table>
+      {% for r in received %}
+      <tr>
+          <td style="padding-right: 1.5em">
+              {% if r.sender.get_full_name %}
+                {{ r.sender.get_full_name }}
+              {% else %}
+                {{ r.sender.username }}
+              {% endif %}
+          </td>
+          <td style="padding-right: 1.5em">
+              <a href="{{ r.comment.media.get_absolute_url }}">{{ r.comment.media.original_filename }}</a>
+          </td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+      </table>
   </div>
   <div style="float: right; padding: 10px 30px 0px 0px;">
       <h3 style='margin-left: -20px;'>Latest Comments:</h3>
@@ -55,6 +75,26 @@
       </td>
       </tr>
       {% endfor %}
+      </table>
+
+      {% if sent %}
+      <h3 style='margin-left: -20px; margin-top: 30px;'>Unacknowledged Notifications:</h3>
       <table>
+      {% for s in sent %}
+      <tr>
+          <td style="padding-right: 1.5em">
+              {% if s.sender.get_full_name %}
+                {{ s.sender.get_full_name }}
+              {% else %}
+                {{ s.sender.username }}
+              {% endif %}
+          </td>
+          <td style="padding-right: 1.5em">
+              <a href="{{ s.comment.media.get_absolute_url }}">{{ s.comment.media.original_filename }}</a>
+          </td>
+      </tr>
+      {% endfor %}
+      </table>
+      {% endif %}
   </div>
 {% endblock %}

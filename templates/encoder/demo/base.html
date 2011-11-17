@@ -34,17 +34,35 @@
       {% endif %}
       |
       {{ c.created_time|naturalday }}
+      <div style="float: right; padding: 3px; margin-right: 20px;">
+      {% for notification in c.notifications.all %}
+        {% ifnotequal notification.receiver.username username %}
+          <img src="/static/encoder/img/flag_green.png" style="height: 15px;" title="{{ notification.receiver.get_full_name }}" />
+        {% else %}
+            <a href="{% url 'delete_notification' notification.id %}"><img src="/static/encoder/img/flag_green_delete.png" style="height: 15px;" title="{{ notification.receiver.get_full_name }}" /></a>
+        {% endifnotequal %}
+      {% endfor %}
+      </div>
       </div>
       <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
         <p>{{ c.text|link_seek }}</p>
       </div>
+      {% ifequal c.commenter.username username %}
+      <div class="comment-notification-form" style="border-top: 3px solid black; padding: 5px;">
+          <form action="{% url 'add_notification' c.id %}" method="POST">
+              {% csrf_token %}
+              {{ c.comment_notification_form }}
+              <input style="padding: 1px 3px 1px 3px;" type="submit" value="Notify" />
+          </form>
+      </div>
+      {% endifequal %}
     </div>
   {% endfor %}
   <br />
   {% if username %}
   <div style="border: 1px solid lightgray; margin: 0 10px 8px 0;">
   <div style="background-color: #DDE8DD; border: 2px solid lightgray; height: 20px; padding: 3px;" >
-      Add A New Comment
+      Contribute a Comment
   </div>
   <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
   <form style="margin-right: 10px;" action="{% url 'media_player' media.identifier %}" method="post">

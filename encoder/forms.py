@@ -18,3 +18,20 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = encoder.Comment
         exclude = ('commenter', 'last_modified_time', 'created_time', 'media')
+
+
+class CommentNotificationForm(forms.ModelForm):
+
+    def __init__(self, request, comment, *args, **kwargs):
+        result = super(CommentNotificationForm, self).__init__(*args, **kwargs)
+        #can't notify myself
+        self.fields['receiver'].queryset = self.fields['receiver'].queryset.exclude(username=request.user.username)
+        #can't notify already notified users
+        notified = [n.receiver.username for n in comment.notifications.all()]
+        self.fields['receiver'].queryset = self.fields['receiver'].queryset.exclude(username__in=notified)
+        self.fields['receiver'].label = ''
+        return result
+
+    class Meta:
+        model = encoder.CommentNotification
+        exclude = ('comment', 'created_time', 'seen_time', 'sender')

@@ -204,3 +204,17 @@ class Comment(models.Model):
             self.created_time = datetime.datetime.now()
         self.last_modified_time = datetime.datetime.now()
         return super(Comment, self).save(*args, **kwargs)
+
+
+class CommentNotification(models.Model):
+    comment = models.ForeignKey('Comment', related_name='notifications')
+    created_time = models.DateTimeField()
+    seen_time = models.DateTimeField(null=True, default=None)
+    sender = models.ForeignKey(User, related_name='sent_notifications')
+    receiver = models.ForeignKey(User, related_name='received_notifications')
+
+    class Meta:
+        unique_together = (("comment", "receiver"),)
+
+    def seen():
+        return bool(seen_time)
