@@ -65,6 +65,6 @@ function seek(time) {
       $f('player').play(); 
       setTimeout(function() {
         $f('player').seek(time);
-      }, (500));
+      }, (2000));
     }
 }
