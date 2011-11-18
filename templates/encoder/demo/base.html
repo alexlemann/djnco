@@ -45,7 +45,7 @@
       </div>
       </div>
       <div style="border-top: 1px solid lightgray; padding: 5px; background-color: #FAFFFA;">
-        <p>{{ c.text|link_seek }}</p>
+        <p>{{ c.text|urlize|link_seek|linebreaks }}</p>
       </div>
       {% ifequal c.commenter.username username %}
       <div class="comment-notification-form" style="border-top: 3px solid black; padding: 5px;">
