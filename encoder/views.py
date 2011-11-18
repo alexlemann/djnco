@@ -25,8 +25,12 @@ def get_username(request):
 def add_notification(request, comment_id):
     if not request.POST:
         raise Http404
-    comment = get_object_or_404(encoder.Comment, id=comment_id)
-    comment_notification_form = forms.CommentNotificationForm(data=request.POST, request=request, comment=comment)
+    comment = get_object_or_404(encoder.Comment,
+                                id=comment_id,
+                                commenter=request.user)
+    comment_notification_form = forms.CommentNotificationForm(data=request.POST,
+                                                              request=request,
+                                                              comment=comment)
     if comment_notification_form.is_valid():
         comment_notification_form.instance.sender = request.user
         comment_notification_form.instance.created_time = datetime.now()
@@ -37,8 +41,7 @@ def add_notification(request, comment_id):
 def delete_notification(request, notification_id):
     notification = get_object_or_404(encoder.CommentNotification,
                                      id=notification_id,
-                                     receiver=request.user,
-                                    )
+                                     receiver=request.user)
     notification.delete()
     return redirect(notification.comment.media.get_absolute_url())
 
@@ -55,7 +58,8 @@ def media_player(request, identifier):
             comment_form.save()
 
     for c in comments:
-        c.comment_notification_form = forms.CommentNotificationForm(request, comment=c)
+        c.comment_notification_form = forms.CommentNotificationForm(request,
+                                                                    comment=c)
     
     seek_time = request.GET.get('time', None)
     if seek_time:
@@ -67,8 +71,7 @@ def media_player(request, identifier):
         'comments': comments,
         'description': link_seek(media.description),
         'comment_form': comment_form,
-        'seek_time': seek_time
-    })
+        'seek_time': seek_time})
     try:
         v = media.video
         return render_to_response('encoder/demo/video_player.html', context)
@@ -82,8 +85,7 @@ def delete_comment(request, comment_id):
         return HttpResponseForbidden()
     context = RequestContext(request, {
         'username': request.user.username,
-        'comment': comment
-    })
+        'comment': comment})
     return render_to_response('encoder/delete_comment.html', context)
 
 
