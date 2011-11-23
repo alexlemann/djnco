@@ -19,10 +19,10 @@ DATABASES = {
     }
 }
 
-UPLOAD_DIR='/home/ablemann/projects/djnco/djnco/incoming/'
-ENCODESRC_DIR='/home/ablemann/projects/djnco/djnco/encode_source/'
-ENCODEDST_DIR='/mnt/encode_dst/'
-PUBLISH_DIR='/mnt/published/'
+UPLOAD_DIR='/Users/alexlemann/projects/djnco/media/incoming/'
+ENCODESRC_DIR='/Users/alexlemann/projects/djnco/media/encode_src/'
+ENCODEDST_DIR='/Users/alexlemann/projects/djnco/media/encode_dst/'
+PUBLISH_DIR='/Users/alexlemann/projects/djnco/media/published/'
 
 import djcelery
 djcelery.setup_loader()
