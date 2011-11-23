@@ -138,7 +138,7 @@ def home(request):
             'comments': search(search_query, comments_query,
                                encoder.Comment.objects.all().order_by('-created_time')),
             'media': search(search_query, media_query,
-                            encoder.Media.objects.filter(encoding_finished=True).order_by('-encode_start_time')),
+                            encoder.Media.objects.encoded().order_by('-encode_start_time')),
         })
     return render_to_response('encoder/home.html', context)
 
@@ -150,7 +150,7 @@ def collection(request, collection_slug):
     if search_query:
         media = search(search_query, media_query, encoder.Media.objects.filter(collection=collection))
     else:
-        media = collection.media.filter(encoding_finished=True).order_by('-encode_end_time')
+        media = collection.media.encoded().order_by('-encode_end_time')
     paginator = Paginator(media, 10)
     page = request.GET.get('page', 1)
     try:

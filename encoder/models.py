@@ -96,6 +96,9 @@ class Collection(models.Model):
     def __unicode__(self):
         return self.slug
 
+class EncodedMediaManager(models.Manager):
+    def encoded(self):
+        return self.filter(encoding_finished=True)
 
 class Media(models.Model):
     def encode_src(self, *args):
@@ -117,6 +120,8 @@ class Media(models.Model):
     queued_time = models.DateTimeField(null=True, default=None)
     encode_start_time = models.DateTimeField(null=True, default=None)
     encode_end_time = models.DateTimeField(null=True, default=None)
+
+    objects = EncodedMediaManager()
 
     def __unicode__(self):
         return "Media, %s, %s" % (self.collection.slug, self.identifier)

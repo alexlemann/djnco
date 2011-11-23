@@ -17,7 +17,7 @@
       <table>
       {% for c in collections %}
       <tr>
-          <td style="padding-right: 1.5em;"><a href="{{ c.get_absolute_url }}">{{ c.slug }}</a></td><td>{{ c.media.count }}</td>
+          <td style="padding-right: 1.5em;"><a href="{{ c.get_absolute_url }}">{{ c.slug }}</a></td><td>{{ c.media.encoded.count }}</td>
       </tr>
       {% endfor %}
       </table>
