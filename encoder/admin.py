@@ -3,7 +3,7 @@ from djnco.encoder import models as encoder
 
 
 class CollectionAdmin(admin.ModelAdmin):
-    readonly_fields = ('to_be_encoded', 'encode_button', 'to_be_imported',
+    readonly_fields = ('to_be_encoded', 'encode_button', 'to_be_imported_html',
         'import_button', )
     fieldsets = (
         (None, {
@@ -14,7 +14,7 @@ class CollectionAdmin(admin.ModelAdmin):
             'fields': ('to_be_encoded', 'encode_button', ),
         }),
         ('Import Actions', {
-            'fields': ('to_be_imported', 'import_button', ),
+            'fields': ('to_be_imported_html', 'import_button', ),
         }), )
 
     #Show special links to import media when editing a collection, not when

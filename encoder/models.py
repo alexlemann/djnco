@@ -25,33 +25,41 @@ class Collection(models.Model):
 
     def import_media(self):
         collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
+        media = self.to_be_imported()
+        for f in media['videos']:
+            orig_path = os.path.join(collection_path, f)
+            media = Video(collection=self, upload=orig_path)
+            media.save()
+            shutil.move(orig_path, media.encode_src())
+            media.upload.file = File(media.encode_src())
+            media.save()
+        for f in media['audio']:
+            orig_path = os.path.join(collection_path, f)
+            media = Audio(collection=self, upload=orig_path)
+            media.save()
+            shutil.move(orig_path, media.encode_src())
+            media.upload.file = File(media.encode_src())
+            media.save()
+
+    def to_be_imported(self):
+        from collections import defaultdict
+        media = defaultdict(list)
+        collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
         files = os.listdir(collection_path)
         for f in files:
             for media_type, extensions in settings.INCOMING_FORMATS.items():
                 if any([f.endswith(ext) for ext in extensions]):
-                    orig_path = os.path.join(collection_path, f)
-                    if media_type == 'video':
-                        media = Video(collection=self, upload=orig_path)
-                    elif media_type == 'audio':
-                        media = Audio(collection=self, upload=orig_path)
-                    media.save()
-                    shutil.move(orig_path, media.encode_src())
-                    media.upload.file = File(media.encode_src())
-                    media.save()
+                    media[media_type].append(f)
+        return media
 
-    def to_be_imported(self):
+    def to_be_imported_html(self):
         try:
-            collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
-            files = os.listdir(collection_path)
+            media = self.to_be_imported()
         except OSError:
             return 'Directory: ' + self.slug + ' not found'
-        for f in files:
-            found = False
-            for media_type, extensions in settings.INCOMING_FORMATS.items():
-                if any([f.endswith(ext) for ext in extensions]):
-                    found = True
-            if not found:
-                files.remove(f)
+        files = []
+        for type, f in media.items():
+            files += f
         if files:
             return '<br />'.join(files)
         else:
