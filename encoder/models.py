@@ -154,12 +154,12 @@ class Audio(Media):
 
     def encode_dst(self, bitrate):
         path = os.path.join(settings.ENCODEDST_DIR, self.identifier)
-        path += '-' + bitrate + '.mp3'
+        path += '-' + str(bitrate) + '.mp3'
         return path
 
     def publish_path(self, bitrate):
         path = os.path.join(settings.PUBLISH_DIR, self.identifier)
-        path += '-' + bitrate + '.mp3'
+        path += '-' + str(bitrate) + '.mp3'
         return path
 
     def view_on_site(self):
