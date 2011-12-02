@@ -12,7 +12,7 @@ from celery.task import task
 def encode_video(video):
     video.encode_start_time = datetime.datetime.now()
     video.save()
-    ffmpeg = '/usr/bin/ffmpeg'
+    ffmpeg = '/usr/local/bin/ffmpeg'
     for bitrate in settings.VIDEO_BITRATES:
         command = [ffmpeg,
                     #'-g', '250',
@@ -22,9 +22,11 @@ def encode_video(video):
                     '-ar', '44100',
                     '-ab', '96k',
                     '-vcodec', 'libx264',
-                    '-vpre', 'medium',
+                    '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+                    #'-vpre', 'medium',
                     '-b', str(bitrate) + 'k',
                     '-threads', '6',
+                    '-vf', 'scale="iw:trunc(ih/2)*2"',
                     '-y',
                     video.encode_dst(bitrate)]
         proc = subprocess.Popen(command)
