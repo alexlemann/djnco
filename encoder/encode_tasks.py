@@ -19,6 +19,7 @@ def encode_video(video):
                     #'-r', '20',
                     '-i', video.encode_src(),
                     '-acodec', 'libfaac',
+                    '-async', '1',
                     '-ar', '44100',
                     '-ab', '96k',
                     '-vcodec', 'libx264',
