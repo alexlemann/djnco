@@ -63,8 +63,12 @@ def media_player(request, identifier):
     
     seek_time = request.GET.get('time', None)
     if seek_time:
-        min, sec = seek_time.split(':')
-        seek_time = int(min)*60 + int(sec)
+        if len(seek_time.split(':')) == 3:
+            hrs, min, sec = seek_time.split(':')
+            seek_time = int(hrs)*60*60 + int(min)*60 + int(sec)
+        else:
+            min, sec = seek_time.split(':')
+            seek_time = int(min)*60 + int(sec)
     context = RequestContext(request, {
         'username': get_username(request),
         'media': media,
