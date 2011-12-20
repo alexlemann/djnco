@@ -35,3 +35,5 @@ BROKER_PASSWORD = 'password'
 CELERY_CONCURRENCY = 1
 
 SECRET_KEY = 'cvgw6=$q0(!w&5*nt324qy^jmn#ahdufzx!_8-_1-gaf8woqmn'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
