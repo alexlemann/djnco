@@ -9,6 +9,7 @@ from django_extensions.db.fields import UUIDField
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import File
+from django.utils.safestring import mark_safe
 
 from encoder.encode_tasks import encode_video, encode_audio
 
@@ -26,20 +27,20 @@ class Collection(models.Model):
     def import_media(self):
         collection_path = os.path.join(settings.UPLOAD_DIR, self.slug)
         media = self.to_be_imported()
-        for f in media['videos']:
+        for f in media['video']:
             orig_path = os.path.join(collection_path, f)
-            media = Video(collection=self, upload=orig_path)
-            media.save()
-            shutil.move(orig_path, media.encode_src())
-            media.upload.file = File(media.encode_src())
-            media.save()
+            video = Video(collection=self, upload=orig_path)
+            video.save()
+            shutil.move(orig_path, video.encode_src())
+            video.upload.file = File(video.encode_src())
+            video.save()
         for f in media['audio']:
             orig_path = os.path.join(collection_path, f)
-            media = Audio(collection=self, upload=orig_path)
-            media.save()
-            shutil.move(orig_path, media.encode_src())
-            media.upload.file = File(media.encode_src())
-            media.save()
+            audio = Audio(collection=self, upload=orig_path)
+            audio.save()
+            shutil.move(orig_path, audio.encode_src())
+            audio.upload.file = File(audio.encode_src())
+            audio.save()
 
     def to_be_imported(self):
         from collections import defaultdict
@@ -61,7 +62,7 @@ class Collection(models.Model):
         for type, f in media.items():
             files += f
         if files:
-            return '<br />'.join(files)
+            return mark_safe('<br />'.join(files))
         else:
             return 'No files available for importing'
     to_be_imported.short_description = 'To Be Imported'
