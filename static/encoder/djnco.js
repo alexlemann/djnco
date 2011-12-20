@@ -1,8 +1,8 @@
 function show_player(identifier) {
-  var pre = 'http://libmarktest.dhcp.bsu.edu/uploads/published/';
+  var pre = 'http://libstream.dhcp.bsu.edu/uploads/published/';
   var url_low = pre + identifier + '-600.mp4'
   var url_high = pre + identifier + '-1024.mp4'
-  flowplayer('player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
+  flowplayer('player', 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
     clip: { 
       scaling: 'fit',
       urlResolvers: 'bwcheck',
@@ -15,10 +15,10 @@ function show_player(identifier) {
     },
     plugins: { 
       controls: { autoHide: false },
-      pseudo: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' },
-      viral: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.viralvideos-3.2.5.swf' },
+      pseudo: { url: 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer.pseudostreaming-3.2.7.swf' },
+      viral: { url: 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer.viralvideos-3.2.5.swf' },
       bwcheck: {
-        url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.bwcheck-3.2.5.swf',
+        url: 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer.bwcheck-3.2.5.swf',
         serverType: 'http',
         hdButton: 'both',
         dynamic:false 
@@ -40,15 +40,15 @@ function detectDevice(identifier) {
 }
 
 function playAudio(identifier) {
-  var pre = 'http://libmarktest.dhcp.bsu.edu/uploads/published/';
+  var pre = 'http://libstream.dhcp.bsu.edu/uploads/published/';
   var url = pre + identifier + '.mp3'
-  flowplayer('audio_player', 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
+  flowplayer('audio_player', 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer-3.2.7.swf', {
     clip: { 
       autoPlay: false,
       url : url,
     },
     plugins: { 
-      audio: { url: 'http://libmarktest.dhcp.bsu.edu/uploads/flowplayer/flowplayer.audio-3.2.2.swf' },
+      audio: { url: 'http://libstream.dhcp.bsu.edu/uploads/flowplayer/flowplayer.audio-3.2.2.swf' },
       controls: { 
           fullscreen: false,
           height: 25,
