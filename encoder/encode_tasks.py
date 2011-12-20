@@ -27,7 +27,7 @@ def encode_video(video):
                     #'-vpre', 'medium',
                     '-b', str(bitrate) + 'k',
                     '-threads', '6',
-                    '-vf', 'scale="iw:trunc(ih/2)*2"',
+                    '-vf', 'scale=iw:trunc(ih/2)*2',
                     '-y',
                     video.encode_dst(bitrate)]
         proc = subprocess.Popen(command)
