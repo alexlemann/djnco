@@ -108,7 +108,7 @@ class Media(models.Model):
     collection = models.ForeignKey('Collection', related_name='media')
     identifier = UUIDField(unique=True)
     original_filename = models.CharField(max_length=1024)
-    upload = models.FileField(upload_to=encode_src)
+    upload = models.FileField(max_length=1024, upload_to=encode_src)
 
     #metadata fields
     description = models.TextField(null=True, blank=True)
