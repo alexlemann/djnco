@@ -1,15 +1,21 @@
 {% extends "encoder/demo/base.html" %}
 
 {% block player %}
-<div id="audio_{{ media.identifier }}-128" style="height: 18px;">
-  <a href='http://libstream.dhcp.bsu.edu/uploads/published/{{ media.identifier }}-128.mp3'
+<div id="nonios_{{ media.identifier }}-128" style="height: 18px; display: none;">
+  <a href='http://libstream.dhcp.bsu.edu/{{ media.identifier }}-128.mp3'
      style='display:block;width:719px;height:25px;'
      id='audio_player' />
   </a>
 </div>
+<div id="ios_{{ media.identifier }}-128" style="display: none;">
+    <br />
+    <audio controls>
+    <source src="http://libstream.dhcp.bsu.edu/{{ media.identifier }}-128.mp3"</source>
+    </audio>
+</div>
 <script type="text/javascript">
  $("document").ready(function() {
-    playAudio('{{ media.identifier }}-128');
+    load_audio_player('{{ media.identifier }}-128');
     {% if seek_time %}
     $f('player').play();
     setTimeout(function() {
